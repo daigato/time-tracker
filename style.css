@@ -1,23 +1,24 @@
 :root {
-  /* Color Palette (Minimalist Slate & Indigo) */
-  --primary-color: #6366f1; /* Indigo 500 */
-  --primary-gradient: linear-gradient(135deg, #818cf8, #4f46e5);
-  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  --shadow-color: rgba(99, 102, 241, 0.1);
-  --shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.04), 0 8px 16px -8px rgba(15, 23, 42, 0.03);
+  /* Color Palette (Minimalist Sage & Forest Green) */
+  --primary-color: #80ebc7; /* Emerald 500 (メインのグリーン) */
+  --primary-gradient: linear-gradient(135deg, #94f3d0, #059669); /* 明るいミントから深みのあるグリーンへのグラデーション */
+  --bg-gradient: linear-gradient(135deg, #f4f7f5 0%, #eef2f0 100%); /* ほんのり緑を帯びたアッシュホワイト */
+  --shadow-color: rgba(16, 185, 129, 0.1);
+  --shadow-card: 0 10px 30px -5px rgba(15, 27, 22, 0.04), 0 8px 16px -8px rgba(15, 27, 22, 0.03);
   
-  --text-primary: #0f172a; /* Slate 900 */
-  --text-secondary: #64748b; /* Slate 500 */
-  --text-light: #94a3b8; /* Slate 400 */
+  --text-primary: #0f1c16; /* 深いフォレストブラック */
+  --text-secondary: #55675f; /* セージグレー（中濃） */
+  --text-light: #8ea096; /* セージグレー（淡） */
   
   --card-bg: #ffffff;
-  --card-border: #e2e8f0; /* Slate 200 */
-  --input-bg: #f8fafc;
-  --input-border: #e2e8f0;
+  --card-border: #e2e9e5; /* 優しいグリーングレーの境界線 */
+  --input-bg: #f4f7f5;
+  --input-border: #e2e9e5;
   
-  --success: #10b981; /* Emerald 500 */
-  --success-bg: rgba(16, 185, 129, 0.08);
-  --danger: #ef4444; /* Red 500 */
+  /* 通知・状態用カラー（バッティングを防ぐため調整） */
+  --success: #9cf7da; /* 濃いめのグリーン */
+  --success-bg: rgba(5, 150, 105, 0.08);
+  --danger: #ff5454; /* Red 500 */
   --danger-bg: rgba(239, 68, 68, 0.08);
   
   --font-main: 'Outfit', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;

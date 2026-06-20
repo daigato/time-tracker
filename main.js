@@ -29,9 +29,6 @@ const btnReset = document.getElementById('btn-reset');
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskListEl = document.getElementById('task-list');
-const statSessionsEl = document.getElementById('stat-sessions');
-const statMinutesEl = document.getElementById('stat-minutes');
-const weeklyChartEl = document.getElementById('weekly-chart');
 const progressRingBar = document.querySelector('.progress-ring-bar');
 
 // ----------------------------------------------------
@@ -208,7 +205,7 @@ function startTimer() {
       task.timeSpent++;
     }
     
-    // Track stats in seconds
+    // Track stats in seconds (Back-end logic kept)
     addStatSeconds(1);
     
     // Save tasks periodically
@@ -371,10 +368,10 @@ function toggleTaskCompleted(id) {
     renderTasks();
     updateActiveTaskDisplay();
     updateTimerDisplay();
-    renderStats(); // Update completed count
   }
 }
 
+// 完了タスクを選択できないように制御
 function selectTask(id) {
   const task = tasks.find(t => t.id === id);
   if (task && !task.completed) {
@@ -397,7 +394,6 @@ function deleteTask(id) {
   if (activeTaskId === id) {
     pauseTimer();
     sessionTime = 0;
-    activeTaskId = null;
   }
   
   tasks = tasks.filter(t => t.id !== id);
@@ -411,7 +407,6 @@ function deleteTask(id) {
   renderTasks();
   updateActiveTaskDisplay();
   updateTimerDisplay();
-  renderStats();
 }
 
 function updateActiveTaskDisplay() {
@@ -435,7 +430,7 @@ function updateActiveTaskTimeDisplay(id) {
 }
 
 // ----------------------------------------------------
-// Statistics & Charts Functions
+// Statistics & Charts Functions (Internal Log Only)
 // ----------------------------------------------------
 function getTodayDateString() {
   const now = new Date();
@@ -448,10 +443,7 @@ function getTodayDateString() {
 function loadStats() {
   const storedStats = localStorage.getItem('focusflow_stats');
   stats = storedStats ? JSON.parse(storedStats) : [];
-  
-  // Clean up any old stats schemas if necessary
   stats = stats.map(s => {
-    // If it's old Pomodoro stats schema
     if (s.sessionsCompleted !== undefined && s.secondsTracked === undefined) {
       return {
         date: s.date,
@@ -460,8 +452,6 @@ function loadStats() {
     }
     return s;
   });
-  
-  renderStats();
 }
 
 function saveStats() {
@@ -482,66 +472,6 @@ function addStatSeconds(seconds) {
   }
   
   saveStats();
-  renderStats();
-}
-
-function renderStats() {
-  const today = getTodayDateString();
-  const todayStat = stats.find(s => s.date === today);
-  const totalSeconds = todayStat ? todayStat.secondsTracked : 0;
-  
-  statMinutesEl.textContent = formatTimeSpent(totalSeconds);
-  statSessionsEl.textContent = tasks.filter(t => t.completed).length;
-  
-  renderWeeklyChart();
-}
-
-function renderWeeklyChart() {
-  weeklyChartEl.innerHTML = '';
-  
-  const last7Days = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const dateStr = `${year}-${month}-${day}`;
-    
-    const weekdayLabels = ['日', '月', '火', '水', '木', '金', '土'];
-    const label = weekdayLabels[d.getDay()];
-    
-    last7Days.push({
-      date: dateStr,
-      label: label,
-      minutes: 0
-    });
-  }
-  
-  last7Days.forEach(day => {
-    const matchedStat = stats.find(s => s.date === day.date);
-    if (matchedStat) {
-      day.minutes = Math.round(matchedStat.secondsTracked / 60);
-    }
-  });
-  
-  const maxMinutes = Math.max(...last7Days.map(d => d.minutes), 30); // scale ceiling: min 30 minutes
-  
-  last7Days.forEach(day => {
-    const barHeightPercent = (day.minutes / maxMinutes) * 100;
-    
-    const barWrapper = document.createElement('div');
-    barWrapper.className = 'chart-bar-wrapper';
-    
-    barWrapper.innerHTML = `
-      <div class="chart-bar-container" title="${day.minutes}分記録">
-        <div class="chart-bar-fill" style="height: ${barHeightPercent}%"></div>
-      </div>
-      <span class="chart-label">${day.label}</span>
-    `;
-    
-    weeklyChartEl.appendChild(barWrapper);
-  });
 }
 
 // ----------------------------------------------------
